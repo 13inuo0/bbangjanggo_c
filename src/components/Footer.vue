@@ -21,8 +21,8 @@
             <p>Android 전용</p>
           </div>
           <div class="iso icon">
-            <img src="/images/pjs/apple.png" alt="iso" />
-            <p>iso 전용</p>
+            <img src="/images/pjs/apple.png" alt="ios" />
+            <p>ios 전용</p>
           </div>
           <div class="sns">
             <!-- <img src="/images/pjs/twiter.png" alt="sns" /> -->
