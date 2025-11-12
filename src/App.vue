@@ -20,8 +20,14 @@ import { useRoute } from "vue-router";
 import Footer from "./components/Footer.vue";
 import Header from "./components/Header.vue";
 import Quick from "./components/Quick.vue";
+import { computed } from "vue";
 
 const route = useRoute()
+
+// 관리자 기사 페이지 레이아웃
+const isSpecialPage = computed(() => {
+  return route.path.startsWith("/admin") || route.path.startsWith("/worker") || route.path.startsWith("/loginworker");
+});
 </script>
 
 <style lang="scss" scoped></style>
