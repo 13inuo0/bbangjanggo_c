@@ -19,7 +19,7 @@
             <div class="logline"></div>
             <router-link to="/searchPass">비밀번호 찾기</router-link>
             <div class="logline"></div>
-            <router-link to="/">관리자 로그인</router-link>
+            <router-link to="/loginworker">관리자 로그인</router-link>
           </div>
         </div>
         <div class="line"></div>
