@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[768px] m-auto bg-red-100 overflow-hidden">
+  <div class="w-[768px] m-auto overflow-hidden">
     <!-- Font Awesome CDN 추가 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <router-view></router-view>
