@@ -21,6 +21,9 @@ import Jobs_worker from "@/pages/worker/Jobs_worker.vue";
 import Mypage_worker from "@/pages/worker/Mypage_worker.vue";
 import Signup_worker from "@/pages/worker/Signup_worker.vue";
 import InfoRegister_worker from "@/pages/worker/InfoRegister_worker.vue";
+import Payment_admin from "@/pages/admin/Payment_admin.vue";
+import Custormer_admin from "@/pages/admin/Custormer_admin.vue";
+import Notice_admin from "@/pages/admin/Notice_admin.vue";
 
 const routes = [
 
@@ -47,6 +50,9 @@ const routes = [
       { path: "dashboard", component: Dashboard_admin },
       { path: "reservation", component: Reservation_admin },
       { path: "workermanage", component: Worker_admin },
+      { path: "payment", component: Payment_admin },
+      { path: "custormer", component: Custormer_admin },
+      { path: "notice", component: Notice_admin },
       { path: "settings", component: Settings_admin },
   ] },
 
