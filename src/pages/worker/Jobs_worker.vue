@@ -1,18 +1,40 @@
 <template>
-  <div class="w-[768px] min-h-screen relative font-[SpokaHanSansNeo] font-normal">
+  <div class="w-full max-w-[768px] mx-auto font-[SpokaHanSansNeo] font-normal relative" style="height: 100vh">
     <!-- 배송 목록 화면 -->
-    <div v-show="showDeliveryList" class="w-full min-h-screen bg-white overflow-y-auto pb-20">
-      <div class="p-6">
-        <div class="flex w-[85%] place-content-between items-center mt-5 mb-9">
-          <p class="text-xl">{{ 1 }}건만 더 하면 배달 완료! 힘내세요!</p>
-          <span>{{ 1 }}/{{ 4 }}</span>
+    <div v-show="showDeliveryList" class="w-full h-full bg-white overflow-y-auto pb-25">
+      <div>
+        <div class="h-[100px] w-full max-w-[750px] fixed bg-white z-999 pl-[25px]">
+          <div class="w-full max-w-[600px] flex flex-col gap-4">
+            <!-- 배송 완료건 확인 정보 -->
+            <div class="flex place-content-between items-center mt-7">
+              <p class="text-xl">{{ remainingCount }}건만 더 하면 배달 완료! 힘내세요!</p>
+              <span>{{ remainingCount }}/{{ totalCount }}</span>
+            </div>
+            <!-- 프로그레스바 -->
+            <div class="w-full mb-9">
+              <div class="w-full h-3 bg-gray-200 rounded-full">
+                <div
+                  class="h-full bg-[#50311D] rounded-full transition-all duration-500 ease-out"
+                  :style="{ width: progressPercent + '%' }"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
-        
+
         <!-- 배송 카드들 -->
-        <div class="space-y-4">
-          <div v-for="delivery in deliveryList" :key="delivery.reservationNo" class="border border-gray-300 rounded-lg">
+        <div class="space-y-4 pt-[120px] px-6">
+          <div
+            v-for="delivery in sortedDeliveryList"
+            :key="delivery.reservationNo"
+            class="border border-gray-300 rounded-lg transition-opacity duration-300"
+            :class="{ 'opacity-60': delivery.status === 'completed' }"
+          >
             <!-- 배송카드 상단 예약정보 및 손님정보 -->
-            <div class="flex justify-between items-start bg-[#ba8e5f] p-5 rounded-t-lg">
+            <div
+              class="flex justify-between items-start p-5 rounded-t-lg"
+              :class="delivery.status === 'completed' ? 'bg-gray-300' : 'bg-[#ba8e5f]'"
+            >
               <p class="text-sm text-gray-50">예약 번호: {{ delivery.reservationNo }}</p>
               <p class="text-sm text-gray-50 space-y-1">{{ delivery.customerName }} · {{ delivery.phone }}</p>
             </div>
@@ -20,18 +42,41 @@
               <!-- 픽업장소 및 배달장소 -->
               <div class="flex flex-col items-start gap-[15px]">
                 <div class="flex">
-                  <div class="relative bg-[#ba8e5f] w-[40px] h-[40px] rounded-4xl mr-4 "><p class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[13px] text-white font-[SpokaHanSansNeo]">픽업</p></div>
+                  <div class="relative bg-[#ba8e5f] w-[40px] h-[40px] rounded-4xl mr-4">
+                    <p
+                      class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[13px] text-white font-[SpokaHanSansNeo]"
+                    >
+                      픽업
+                    </p>
+                  </div>
                   <p class="text-base my-2">{{ delivery.storeName }}</p>
                 </div>
                 <div class="flex">
-                  <div class="relative bg-[#50311d] w-[40px] h-[40px] rounded-4xl mr-4"><p class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[13px] text-white font-[SpokaHanSansNeo]">배달</p></div>
+                  <div class="relative bg-[#50311d] w-[40px] h-[40px] rounded-4xl mr-4">
+                    <p
+                      class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[13px] text-white font-[SpokaHanSansNeo]"
+                    >
+                      배달
+                    </p>
+                  </div>
                   <p class="text-base my-2">보관지점: {{ delivery.storage }}</p>
                 </div>
               </div>
+              <!-- 배달리스트 상태 버튼 -->
               <div class="text-sm text-gray-600 space-y-1">
-                <span class="px-3 py-1 text-white text-sm rounded" :class="getStatusClass(delivery.status)">
+                <button
+                  @click="handleStatusChange(delivery)"
+                  :disabled="delivery.status === 'completed'"
+                  class="px-4 py-2 text-white text-sm rounded transition-all duration-300"
+                  :class="[
+                    getStatusClass(delivery.status),
+                    delivery.status === 'completed'
+                      ? 'cursor-not-allowed'
+                      : 'cursor-pointer hover:opacity-80 active:scale-95',
+                  ]"
+                >
                   {{ getStatusText(delivery.status) }}
-                </span>
+                </button>
               </div>
             </div>
           </div>
@@ -40,8 +85,8 @@
     </div>
 
     <!-- 지도 화면 (기존) -->
-    <div v-show="!showDeliveryList" class="w-full min-h-screen relative">
-      <div id="map" class="w-full min-h-screen"></div>
+    <div v-show="!showDeliveryList" class="absolute inset-0 w-full h-full" style="overflow: hidden">
+      <div id="map" class="w-full h-full"></div>
 
       <transition name="slide-up">
         <div v-if="showPanel" class="w-full h-[360px] bg-gray-100 absolute bottom-0 left-0 z-[999] text-center">
@@ -61,7 +106,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 text-start">
               <div class="flex">
                 <p class="text-gray-400 text-base w-[120px]">픽업지점</p>
                 <span class="text-gray-800 text-base">{{ selectedMarker?.title || "따끈따끈 베이커리" }}</span>
@@ -126,7 +171,7 @@
     <!-- 토글 버튼 -->
     <div
       @click="workToggle"
-      class="w-[50px] h-[50px] bg-[#50311D] absolute top-[30px] right-[30px] rounded-full z-[999] transform translate-z-0 cursor-pointer"
+      class="w-[50px] h-[50px] bg-[#50311D] absolute top-[35px] right-[40px] rounded-full z-[999] transform translate-z-0 cursor-pointer"
     >
       <i
         :class="showDeliveryList ? 'fa-map' : 'fa-bars'"
@@ -220,6 +265,65 @@ const getStatusClass = (status) => {
   return statusClass[status];
 };
 
+// 완료된 배송 건수
+const completedCount = computed(() => {
+  return deliveryList.value.filter((d) => d.status === "completed").length;
+});
+
+// 전체 배송 건수
+const totalCount = computed(() => {
+  return deliveryList.value.length;
+});
+
+// 프로그레스 바 퍼센트 계산
+const progressPercent = computed(() => {
+  return (completedCount.value / totalCount.value) * 100;
+});
+
+// 배송 완료되지 않은 건수 계산
+const remainingCount = computed(() => {
+  return deliveryList.value.filter((d) => d.status !== "completed").length;
+});
+
+// 배송 목록 정렬 (진행 중인 건이 위로, 완료된 건이 아래로)
+const sortedDeliveryList = computed(() => {
+  return [...deliveryList.value].sort((a, b) => {
+    // 상태 우선순위: pickup(0) < delivering(1) < completed(2)
+    const statusOrder = {
+      pickup: 0,
+      delivering: 1,
+      completed: 2,
+    };
+    return statusOrder[a.status] - statusOrder[b.status];
+  });
+});
+
+const handleStatusChange = (delivery) => {
+  if (delivery.status === "pickup") {
+    delivery.status = "delivering";
+  } else if (delivery.status === "delivering") {
+    delivery.status = "completed";
+  }
+
+  // 지도 마커 업데이트
+  updateMarkerOpacity(delivery);
+};
+
+// 마커 투명도 업데이트 함수
+const updateMarkerOpacity = (delivery) => {
+  const marker = markers.find((m) => m.getTitle() === delivery.storeName);
+  if (marker) {
+    const markerImage = marker.getImage();
+    if (delivery.status === "completed") {
+      // 완료된 마커는 투명도 적용
+      marker.setOpacity(0.4);
+    } else {
+      // 진행 중인 마커는 불투명하게
+      marker.setOpacity(1);
+    }
+  }
+};
+
 const handleCancel = () => {
   if (confirm("정말 배송을 취소하시겠습니까?")) {
     if (selectedMarkerInstance.value) {
@@ -234,19 +338,32 @@ const handleCancel = () => {
 
 const handlePickupComplete = () => {
   deliveryStatus.value = "delivering";
+
+  // deliveryList에서 해당 배송 정보 찾아서 업데이트
+  const delivery = deliveryList.value.find((d) => d.reservationNo === selectedMarker.value?.reservationNo);
+  if (delivery) {
+    delivery.status = "delivering";
+    updateMarkerOpacity(delivery);
+  }
 };
 
 const handleDeliveryComplete = () => {
   deliveryStatus.value = "completed";
+
+  // deliveryList에서 해당 배송 정보 찾아서 업데이트
+  const delivery = deliveryList.value.find((d) => d.reservationNo === selectedMarker.value?.reservationNo);
+  if (delivery) {
+    delivery.status = "completed";
+    updateMarkerOpacity(delivery);
+  }
+
   setTimeout(() => {
     handleClose();
   }, 2000);
 };
 
 const handleClose = () => {
-  if (selectedMarkerInstance.value) {
-    selectedMarkerInstance.value.setMap(null);
-  }
+  // 마커는 삭제하지 않고 그대로 둠 (이미 updateMarkerOpacity로 회색 처리됨)
   showPanel.value = false;
   deliveryStatus.value = "pickup";
   selectedMarker.value = null;
@@ -323,11 +440,20 @@ const initMap = () => {
         image: markerImage,
       });
 
+      // deliveryList에서 해당 마커의 초기 상태 찾기
+      const deliveryInfo = deliveryList.value.find((d) => d.storeName === info.title);
+      if (deliveryInfo && deliveryInfo.status === "completed") {
+        marker.setOpacity(0.4);
+      }
+
       kakao.maps.event.addListener(marker, "click", function () {
         selectedMarker.value = info;
         selectedMarkerInstance.value = marker;
         showPanel.value = true;
-        deliveryStatus.value = "pickup";
+
+        // 클릭한 마커의 현재 상태를 deliveryList에서 가져오기
+        const currentDelivery = deliveryList.value.find((d) => d.reservationNo === info.reservationNo);
+        deliveryStatus.value = currentDelivery ? currentDelivery.status : "pickup";
       });
 
       markers.push(marker);

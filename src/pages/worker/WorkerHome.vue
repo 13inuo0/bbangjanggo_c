@@ -1,11 +1,11 @@
 <template>
-  <div class="w-[768px] m-auto h-screen flex flex-col overflow-hidden">
+  <div class="w-[768px] m-auto h-screen flex flex-col">
     <!-- h-screen과 flex flex-col 추가, overflow-hidden으로 변경 -->
     <!-- Font Awesome CDN 추가 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
     <!-- router-view 영역을 스크롤 가능하게 -->
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 overflow-hidden">
       <router-view></router-view>
     </div>
     

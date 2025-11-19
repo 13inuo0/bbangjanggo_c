@@ -37,7 +37,13 @@
         </div>
         <div class="infoBox">
           <p>비밀번호</p>
-          <input v-model="password" type="password" placeholder="8자 이상, 영문자 + 숫자 포함" minlength="8" maxlength="12"/>
+          <input
+            v-model="password"
+            type="password"
+            placeholder="8자 이상, 영문자 + 숫자 포함"
+            minlength="8"
+            maxlength="12"
+          />
         </div>
         <div class="infoBox">
           <p>비밀번호 확인</p>
@@ -45,13 +51,15 @@
             v-model="passwordConfirm"
             @input="checkPasswordMatch"
             type="password"
-            placeholder="비밀번호를 재입력해주세요" minlength="8" maxlength="12"
+            placeholder="비밀번호를 재입력해주세요"
+            minlength="8"
+            maxlength="12"
           />
         </div>
         <p v-if="passwordMessage" :class="{ success: isPasswordMatch, error: !isPasswordMatch }">
           {{ passwordMessage }}
         </p>
-        <SignupTerms ref="termsRef"/>
+        <SignupTerms ref="termsRef" />
 
         <!-- 회원가입 버튼 -->
         <button type="submit" class="signupBtn">회원 가입</button>
@@ -162,7 +170,6 @@ const verifyAuthCode = () => {
 
 // 회원가입 완료
 const signup = () => {
-
   // 2️⃣ 비밀번호 일치 확인
   if (!isPasswordMatch.value) {
     alert("비밀번호가 일치하지 않습니다.");
@@ -204,6 +211,7 @@ const signup = () => {
     h2 {
       font-family: "Cafe24Surround";
       color: $point-color;
+      font-size: $sub-font;
       text-align: center;
       margin-bottom: 40px;
     }
@@ -248,7 +256,6 @@ const signup = () => {
           }
           button {
             width: 30%;
-            
           }
         }
       }
@@ -257,7 +264,6 @@ const signup = () => {
   button {
     @include btn-style;
     height: 59px;
-
   }
 }
 // 회원가입 버튼

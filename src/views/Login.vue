@@ -94,6 +94,7 @@ const login = () => {
     h2 {
       font-family: "Cafe24Surround";
       color: $point-color;
+      font-size: $sub-font;
       text-align: center;
       margin-bottom: 40px;
     }

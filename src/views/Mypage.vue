@@ -94,6 +94,7 @@ h1 {
 }
 h3 {
   font-size: $sub-font;
+  font-weight: 700;
   padding-bottom: 30px;
   color: $font-color;
 }
