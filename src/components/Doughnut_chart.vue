@@ -3,7 +3,7 @@
     <!-- 차트와 범례 영역 -->
     <div class="flex items-center justify-center gap-6 h-full relative">
       <!-- 차트 -->
-      <div ref="chartRef" class="h-full" style="width: 280px; height: 280px"></div>
+      <div ref="chartRef" class="h-full absolute top-0.5 -left-0.2" style="width: 250px; height: 250px"></div>
 
       <!-- 범례 (오른쪽) -->
       <div class="flex flex-col gap-2 absolute top-1/2 -translate-y-1/2 right-8">

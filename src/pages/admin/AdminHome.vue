@@ -10,8 +10,6 @@
         <div class="p-4 flex-col text-left pl-9 pt-6 border-b border-gray-200 dark:border-gray-700">
           <div class="flex items-end gap-2 mb-6">
             <h1 class="text-3xl font-bold text-gray-800 dark:text-white">빵장고</h1>
-            <!-- 오늘 날짜 빵장고 옆 위치 -->
-            <!-- <div class="text-xs text-gray-600">{{ currentDate }}</div> -->
           </div>
           <span class="text-xl font-bold text-gray-800 dark:text-white">김빵장</span><span>님</span>
           <p class="text-xs font-bold py-1">좋은 하루 보내세요!</p>
@@ -27,10 +25,14 @@
             :to="link.path"
             :class="{
               'font-bold text-[#BA8E5F] dark:text-indigo-300': isActive(link.path),
-              'text-gray-500 dark:text-gray-400': !isActive(link.path),
+               'text-gray-400 dark:text-gray-500': !isActive(link.path),
             }"
           >
-            <img :src="isActive(link.path) ? link.activeIcon : link.icon" class="mr-3 w-5 h-5" alt="" />
+            <i
+              :class="link.icon"
+              class="mr-3 w-5 text-center"
+              :style="{ color: isActive(link.path) ? '#BA8E5F' : '' }"
+            ></i>
             {{ link.name }}
           </router-link>
         </nav>
@@ -39,16 +41,16 @@
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
           <button
             @click="logout"
-            class="w-full flex items-center justify-center px-4 py-2 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            class="w-full flex items-center justify-center px-4 py-2 text-gray-400 dark:text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
-            <img src="/images/pjs/c-icon/logoout.png" class="mr-3 w-5 h-5" />
+            <i class="fa-solid fa-right-from-bracket mr-3 w-5"></i>
             로그아웃
           </button>
         </div>
       </div>
 
       <!-- 오른쪽 내용 (사이드바 너비만큼 왼쪽 마진) -->
-      <div class="flex-1 ml-64 min-h-screen ">
+      <div class="flex-1 ml-64 min-h-screen">
         <div class="w-full">
           <!-- 사고발생 경고창 배너 -->
           <AlertBanner />
@@ -75,44 +77,37 @@ const links = [
   {
     name: "대시 보드",
     path: "/admin/dashboard",
-    icon: "/images/pjs/c-icon/dashboard.png",
-    activeIcon: "/images/pjs/c-icon/dashboard-active.png",
+    icon: "fa-solid fa-house",
   },
   {
     name: "예약 관리",
     path: "/admin/reservation",
-    icon: "/images/pjs/c-icon/reservation.png",
-    activeIcon: "/images/pjs/c-icon/reservation-active.png",
+    icon: "fa-solid fa-calendar-check",
   },
   {
     name: "기사 관리",
     path: "/admin/workermanage",
-    icon: "/images/pjs/c-icon/delivery.png",
-    activeIcon: "/images/pjs/c-icon/delivery-active.png",
+    icon: "fa-solid fa-truck",
   },
   {
     name: "정산관리",
     path: "/admin/payment",
-    icon: "/images/pjs/c-icon/payment.png",
-    activeIcon: "/images/pjs/c-icon/payment-active.png",
+    icon: "fa-solid fa-cash-register",
   },
   {
     name: "고객 문의 관리",
     path: "/admin/custormer",
-    icon: "/images/pjs/c-icon/custormer.png",
-    activeIcon: "/images/pjs/c-icon/custormer-active.png",
+    icon: "fa-solid fa-comment-dots",
   },
   {
     name: "공지 및 알림",
     path: "/admin/notice",
-    icon: "/images/pjs/c-icon/notice.png",
-    activeIcon: "/images/pjs/c-icon/notice-active.png",
+    icon: "fa-solid fa-bell",
   },
   {
     name: "관리자 설정",
     path: "/admin/settings",
-    icon: "/images/pjs/c-icon/setting.png",
-    activeIcon: "/images/pjs/c-icon/setting-active.png",
+    icon: "fa-solid fa-gear",
   },
 ];
 
@@ -137,14 +132,9 @@ const logout = () => {
 </script>
 
 <style scoped>
-/* @media (max-width: 768px) {
-  .fixed {
-    position: relative;
-    width: 100%;
-    height: auto;
-  } */
-/* .ml-64 {
-    margin-left: 0;
-  }
-} */
+/* 아이콘 크기 통일 */
+i {
+  font-size: 1.125rem; /* 18px */
+  width: 1.25rem; /* 20px */
+}
 </style>

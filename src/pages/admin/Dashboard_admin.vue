@@ -277,66 +277,28 @@
 
   <!-- 하단 3개 영역 -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
-    <!-- 보관소 상태 모니터링 -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs p-6">
-      <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">보관소 상태 모니터링</h2>
-      
-      <!-- 지점 선택 버튼 -->
-      <div class="flex gap-2 mb-4">
-        <button
-          v-for="branch in branches"
-          :key="branch.id"
-          @click="selectedBranch = branch.id"
-          :class="[
-            'px-3 py-1.5 text-sm rounded transition-colors',
-            selectedBranch === branch.id
-              ? 'bg-yellow-100 text-yellow-800 font-medium'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          ]"
-        >
-          {{ branch.name }}
-        </button>
-      </div>
-
-      <!-- 현재 선택된 지점 정보 -->
-      <div class="space-y-3">
-        <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
-          <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-          <span>대구역 보관소</span>
-        </div>
-        <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1 pl-4">
-          <div>- 실내 🟢 정상</div>
-          <div>- 평균: 68% 사용 중</div>
-          <div>- 온도: 4.2°C</div>
-          <div>- 적정일: 2025.11.22 09:30</div>
-        </div>
-        <button class="text-sm text-gray-500 hover:text-gray-700 underline">
-          [상세보기]
-        </button>
-      </div>
-    </div>
-
+    <Monitoring />
     <!-- 고객 문의 관리 -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">고객 문의 관리</h2>
         <div class="flex items-center gap-2">
-          <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">미답변 5</span>
-          <button 
-            @click="goToInquiries"
-            class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
-          >
-            전체보기
-            <span>→</span>
-          </button>
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-white">고객 문의 관리</h2>
+          <div class="bg-[#FFEBC2] rounded-xl px-3 py-2 flex items-center text-center gap-1">
+            <span class="text-[#BA8E5F] font-bold text-xs ">미답변</span>
+            <span class="text-[red] font-black text-xm"> 5</span>
+          </div>
         </div>
+        <button @click="goToInquiries" class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
+          전체보기
+          <span><i class="fa-solid fa-angles-right" style="color: #adafb3"></i></span>
+        </button>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-2 px-3">
         <div
           v-for="inquiry in inquiries"
           :key="inquiry.id"
-          class="p-3 bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+          class="p-2 border-b border-gray-200 dark:bg-gray-700  hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
         >
           <div class="text-sm font-medium text-gray-800 dark:text-white">
             {{ inquiry.title }}
@@ -349,20 +311,17 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-white">공지사항</h2>
-        <button 
-          @click="goToNotices"
-          class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
-        >
+        <button @click="goToNotices" class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
           전체보기
-          <span>→</span>
+          <span><i class="fa-solid fa-angles-right" style="color: #adafb3"></i></span>
         </button>
       </div>
 
-      <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+      <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300 px-3">
         <div
           v-for="notice in notices"
           :key="notice.id"
-          class="hover:text-gray-900 dark:hover:text-white cursor-pointer"
+         class="p-2 border-b border-gray-200 dark:bg-gray-700  hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
         >
           {{ notice.content }}
         </div>
@@ -378,6 +337,10 @@ import Chart from "@/components/Chart.vue";
 import DashboardStats from "@/components/DashboardStats.vue";
 import Doughnut_chart from "@/components/Doughnut_chart.vue";
 import Half_doughnut from "@/components/Half_doughnut.vue";
+import Monitoring from "@/components/Monitoring.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 // 현재 날짜 기준으로 연도, 월, 주차 계산 함수
 const getCurrentDateInfo = () => {
@@ -445,69 +408,54 @@ const stats = [
   {
     title: "실시간 주문 수",
     value: "25건",
-    icon: "/images/pjs/c-icon/orders.png",
+    icon: "fa-solid fa-clock ",
     bgColor: "bg-gray-100 dark:bg-gray-700",
   },
   {
     title: "일 매출",
     value: "958,000 원",
-    icon: "/images/pjs/c-icon/dailysales.png",
+    icon: "fa-solid fa-coins",
     bgColor: "bg-gray-100 dark:bg-gray-700",
   },
   {
     title: "일 예약수 / 월간 총 예약 수",
     value: "31 건 / 128 건",
-    icon: "/images/pjs/c-icon/reservation.png",
+    icon: "fa-solid fa-calendar-check",
     bgColor: "bg-gray-100 dark:bg-gray-700",
   },
   {
     title: "일 방문자수",
     value: "85 명",
-    icon: "/images/pjs/c-icon/visitors.png",
+    icon: "fa-solid fa-user-group",
     bgColor: "bg-gray-100 dark:bg-gray-700",
   },
 ];
-
-// 보관소 지점 데이터
-const branches = [
-  { id: 1, name: "동대구역" },
-  { id: 2, name: "경대병원역" },
-  { id: 3, name: "반월당역" },
-  { id: 4, name: "서대구역" },
-  { id: 5, name: "대구공항점" },
-];
-
-const selectedBranch = ref(1);
 
 // 고객 문의 데이터
 const inquiries = [
   { id: 1, title: "[픽업 문의] 다른 보관소에서 수령할 수 있나요?" },
   { id: 2, title: "[보관 문의] 빵 보관기간이 얼마나 되나요?" },
-  { id: 3, title: "[배송 문의] 빵이 아닌 다른 보관소에 넘겨져 왔어요" },
-  { id: 4, title: "[기타 문의] 주문 후 변경사항 전달이 가능한가요?" },
-  { id: 5, title: "[결제 문의] 보관료결과는 증빙 결제할 것 같아요" },
+  { id: 3, title: "[배송 문의] 다른 지점으로 변경하고 싶어요" },
+  { id: 4, title: "[기타 문의] 주문 완료 후 예약변경이 가능한가요?" },
+  { id: 5, title: "[결제 문의] 보관료 후불 결제 되나요?" },
 ];
 
 // 공지사항 데이터
 const notices = [
-  { id: 1, content: "대구역 보관소 냉장설비 점기 안내입니다." },
+  { id: 1, content: "대구역 보관소 냉장설비 점검 안내입니다." },
   { id: 2, content: "배차 현황 실시간 새로고침 기능이 추가되었습니다." },
-  { id: 3, content: "10월 25일(금) 02:00~04:00 시험 점검 예정" },
+  { id: 3, content: "10월 25일(금) 02:00~04:00 시스템 점검 예정" },
   { id: 4, content: "'인구 알림 자동 전송' 기능이 새로 추가되었습니다!" },
-  { id: 5, content: "10월 1일부터 보관 수수료 변경이 일부 변경됩니다." },
-  { id: 6, content: "신규 기사 교육 일정 안내" },
+  { id: 5, content: "10월 1일부터 보관 수수료가 일부 변경됩니다." },
+  // { id: 6, content: "신규 기사 교육 일정 안내" },
 ];
 
 // 페이지 이동 함수
 const goToInquiries = () => {
-  // 고객 문의 전체보기 페이지로 이동
-  console.log("고객 문의 전체보기");
-  // router.push('/inquiries');
+  router.push("/admin/custormer");
 };
 
 const goToNotices = () => {
-  // 공지사항 전체보기 페이지로 이동
-  console.log("공지사항 전체보기");
-  // router.push('/notices');
+  router.push("/admin/notice");
 };
 </script>

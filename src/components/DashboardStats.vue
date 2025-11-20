@@ -1,11 +1,14 @@
 <!-- DashboardStats.vue -->
 <template>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3 min-w-246">
+    <!-- Font Awesome CDN 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
     <!-- 통계 카드 컴포넌트-->
     <div
       v-for="(card, index) in stats"
       :key="index"
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-xs px-9 py-4 "
+      class="bg-white dark:bg-gray-800 rounded-lg shadow-xs px-9 py-4"
     >
       <div class="flex items-center justify-between">
         <!-- 왼쪽: 텍스트 -->
@@ -27,11 +30,10 @@
             card.bgColor
           ]"
         >
-          <img 
-            :src="card.icon" 
-            :alt="card.title"
-            class="w-6 h-6 object-contain"
-          />
+          <i 
+            :class="card.icon"
+            class="text-xl text-gray-400 dark:text-gray-500"
+          ></i>
         </div>
       </div>
     </div>
@@ -47,3 +49,10 @@ defineProps({
   }
 });
 </script>
+
+<style scoped>
+/* 아이콘 크기 조정 */
+i {
+  font-size: 1.5rem; /* 24px */
+}
+</style>

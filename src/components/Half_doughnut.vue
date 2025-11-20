@@ -3,7 +3,7 @@
     <!-- 차트와 범례 영역 -->
     <div class="w-full flex items-center justify-center gap-6 h-full relative">
       <!-- 차트 -->
-      <div ref="chartRef" style="width: 350px; height: 350px"></div>
+      <div ref="chartRef" style="width: 350px; height: 330px" class="absolute left-1/5"></div>
 
       <!-- 범례 (오른쪽) -->
       <div class="flex flex-col gap-2 pl-10 absolute top-1/2 -translate-y-1/2 right-8">
@@ -103,7 +103,7 @@ onMounted(async () => {
         top: "68%",
         style: {
           text: `총 ${total}건`,
-          fontSize: 16,
+          fontSize: 18,
           fontWeight: "bold",
           fill: "#333",
         },
