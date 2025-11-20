@@ -27,12 +27,12 @@
           <div
             v-for="delivery in sortedDeliveryList"
             :key="delivery.reservationNo"
-            class="border border-gray-300 rounded-lg transition-opacity duration-300"
+            class="rounded-lg transition-opacity duration-300 shadow-md"
             :class="{ 'opacity-60': delivery.status === 'completed' }"
           >
             <!-- 배송카드 상단 예약정보 및 손님정보 -->
             <div
-              class="flex justify-between items-start p-5 rounded-t-lg"
+              class="flex justify-between items-start p-5 rounded-t-lg "
               :class="delivery.status === 'completed' ? 'bg-gray-300' : 'bg-[#ba8e5f]'"
             >
               <p class="text-sm text-gray-50">예약 번호: {{ delivery.reservationNo }}</p>
@@ -89,8 +89,12 @@
       <div id="map" class="w-full h-full"></div>
 
       <transition name="slide-up">
-        <div v-if="showPanel" class="w-full h-[360px] bg-gray-100 absolute bottom-0 left-0 z-[999] text-center">
-          <div class="flex place-content-between mt-[30px] mx-[50px]">
+        <div
+          v-if="showPanel"
+          class="w-full h-[400px] bg-white absolute bottom-0 left-0 z-999 text-center rounded-t-[1vw] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)]"
+        >
+          <div class="w-full flex flex-row-reverse pt-[25px] pb-[15px] px-[50px]"><i @click="handleClose" class=" fa-solid fa-x text-gray-500 cursor-pointer" ></i></div>
+          <div class="flex place-content-between mt-[15px] mx-[50px]">
             <div class="flex flex-col gap-4 text-start">
               <div class="flex">
                 <p class="text-gray-400 text-[16px] w-[120px] font">예약번호</p>
@@ -298,6 +302,18 @@ const sortedDeliveryList = computed(() => {
   });
 });
 
+// ✨ 여기에 추가: 모든 마커가 보이도록 지도 영역 재설정하는 함수
+const fitBoundsToMarkers = () => {
+  if (!map || markers.length === 0) return;
+
+  const bounds = new kakao.maps.LatLngBounds();
+  markers.forEach((marker) => {
+    bounds.extend(marker.getPosition());
+  });
+
+  map.setBounds(bounds);
+};
+
 const handleStatusChange = (delivery) => {
   if (delivery.status === "pickup") {
     delivery.status = "delivering";
@@ -377,6 +393,7 @@ const workToggle = () => {
   }
 };
 
+// ✨ initMap 함수 수정
 const initMap = () => {
   window.kakao.maps.load(() => {
     const mapContainer = document.getElementById("map");
@@ -440,7 +457,6 @@ const initMap = () => {
         image: markerImage,
       });
 
-      // deliveryList에서 해당 마커의 초기 상태 찾기
       const deliveryInfo = deliveryList.value.find((d) => d.storeName === info.title);
       if (deliveryInfo && deliveryInfo.status === "completed") {
         marker.setOpacity(0.4);
@@ -451,13 +467,15 @@ const initMap = () => {
         selectedMarkerInstance.value = marker;
         showPanel.value = true;
 
-        // 클릭한 마커의 현재 상태를 deliveryList에서 가져오기
         const currentDelivery = deliveryList.value.find((d) => d.reservationNo === info.reservationNo);
         deliveryStatus.value = currentDelivery ? currentDelivery.status : "pickup";
       });
 
       markers.push(marker);
     });
+
+    // ✨ 여기에 추가: 모든 마커 생성 후 bounds 설정
+    fitBoundsToMarkers();
   });
 };
 

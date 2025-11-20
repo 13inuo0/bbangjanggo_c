@@ -103,8 +103,21 @@ const loggedInUser = ref(null);
 
 // 로그인 상태 체크
 const checkedLogin = () => {
-  const user = localStorage.getItem("loggedInUser");
-  loggedInUser.value = user ? JSON.parse(user) : null;
+  try {
+    const user = localStorage.getItem("loggedInUser");
+    if (user) {
+      // 유효한 JSON인지 확인
+      const parsed = JSON.parse(user);
+      loggedInUser.value = parsed;
+    } else {
+      loggedInUser.value = null;
+    }
+  } catch (error) {
+    // JSON 파싱 오류 발생 시 localStorage 정리
+    console.error("로그인 정보 파싱 오류:", error);
+    localStorage.removeItem("loggedInUser");
+    loggedInUser.value = null;
+  }
 };
 
 onMounted(() => {
