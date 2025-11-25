@@ -280,12 +280,12 @@
     <Monitoring />
     <!-- 고객 문의 관리 -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs p-6">
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mb-3">
         <div class="flex items-center gap-2">
           <h2 class="text-lg font-semibold text-gray-800 dark:text-white">고객 문의 관리</h2>
-          <div class="bg-[#FFEBC2] rounded-xl px-3 py-2 flex items-center text-center gap-1">
-            <span class="text-[#BA8E5F] font-bold text-xs ">미답변</span>
-            <span class="text-[red] font-black text-xm"> 5</span>
+          <div class="border border-[#E67E50] rounded-xl px-3 py-1 flex items-center text-center gap-1">
+            <span class="text-[#E67E50] font-bold text-xs">미답변</span>
+            <span class="text-[#E67E50] font-black text-xm"> 5</span>
           </div>
         </div>
         <button @click="goToInquiries" class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
@@ -294,11 +294,11 @@
         </button>
       </div>
 
-      <div class="space-y-2 px-3">
+      <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300 px-3">
         <div
           v-for="inquiry in inquiries"
           :key="inquiry.id"
-          class="p-2 border-b border-gray-200 dark:bg-gray-700  hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+          class="p-2 border-b border-gray-200 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
         >
           <div class="text-sm font-medium text-gray-800 dark:text-white">
             {{ inquiry.title }}
@@ -310,7 +310,13 @@
     <!-- 공지사항 -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">공지사항</h2>
+        <div class="flex items-center gap-2">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-white">공지사항</h2>
+          <div class="border border-[#E67E50] rounded-xl px-3 py-1 flex items-center text-center gap-1">
+            <span class="text-[#E67E50] font-bold text-xs">NEW</span>
+            <span class="text-[#E67E50] font-black text-xm"> 2</span>
+          </div>
+        </div>
         <button @click="goToNotices" class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
           전체보기
           <span><i class="fa-solid fa-angles-right" style="color: #adafb3"></i></span>
@@ -321,23 +327,25 @@
         <div
           v-for="notice in notices"
           :key="notice.id"
-         class="p-2 border-b border-gray-200 dark:bg-gray-700  hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
+          class="p-2 border-b border-gray-200 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition-colors"
         >
           {{ notice.content }}
         </div>
       </div>
     </div>
   </div>
+ 
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import BarChart from "@/components/BarChart.vue";
 import Chart from "@/components/Chart.vue";
 import DashboardStats from "@/components/DashboardStats.vue";
 import Doughnut_chart from "@/components/Doughnut_chart.vue";
 import Half_doughnut from "@/components/Half_doughnut.vue";
 import Monitoring from "@/components/Monitoring.vue";
+import EmergencyModal from "@/components/EmergencyModal.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -458,4 +466,122 @@ const goToInquiries = () => {
 const goToNotices = () => {
   router.push("/admin/notice");
 };
+// 팝업
+const showEmergencyModal = ref(false);
+
+// 예: 대시보드 로딩 시 자동 팝업
+onMounted(() => {
+  showEmergencyModal.value = true;
+});
+
+// 혹은 버튼 클릭으로 열기
+const openEmergencyModal = () => {
+  showEmergencyModal.value = true;
+};
+const props = defineProps({
+  visible: Boolean,
+  alerts: Array,
+});
+
+const emit = defineEmits(["update:visible"]);
+// 기존 branchStatus 데이터 사용
+const branchStatus = {
+  1: {
+    name: "동대구역점",
+    status: "정상",
+    statusColor: "green",
+    breadCount: 34,
+    totalCapacity: 50,
+    temperature: "4.2°C",
+    humidity: "45%",
+    checkedAt: "2025.12.12 09:30",
+  },
+  2: {
+    name: "경대병원역점",
+    status: "주의",
+    statusColor: "yellow",
+    breadCount: 41,
+    totalCapacity: 50,
+    temperature: "5.1°C",
+    humidity: "52%",
+    checkedAt: "2025.12.11 15:10",
+  },
+  3: {
+    name: "반월당역점",
+    status: "점검 필요",
+    statusColor: "red",
+    breadCount: 46,
+    totalCapacity: 50,
+    temperature: "6.0°C",
+    humidity: "58%",
+    checkedAt: "2025.12.11 11:40",
+  },
+  4: {
+    name: "서대구역점",
+    status: "정상",
+    statusColor: "green",
+    breadCount: 23,
+    totalCapacity: 50,
+    temperature: "3.8°C",
+    humidity: "43%",
+    checkedAt: "2025.12.12 09:20",
+  },
+  5: {
+    name: "대구공항점",
+    status: "정상",
+    statusColor: "green",
+    breadCount: 29,
+    totalCapacity: 50,
+    temperature: "4.0°C",
+    humidity: "47%",
+    checkedAt: "2025.12.12 10:00",
+  },
+};
+// 팝업영역
+
+// 긴급 점검 지점 필터링
+const emergencyBranches = computed(() => Object.values(branchStatus).filter((b) => b.statusColor === "red"));
+// 대시보드 진입 시 팝업 표시
+onMounted(() => {
+  if (emergencyBranches.value.length > 0) {
+    showEmergencyModal.value = true;
+  }
+});
+// 팝업 닫기
+const closeEmergencyModal = () => {
+  showEmergencyModal.value = false;
+};
+// 긴급 알림 항목
+const emergencyAlerts = ref([
+  { text: "냉장보관소 14번 냉장고 고장으로 작동 불가", checked: false },
+  { text: "결제 오류", checked: false },
+  { text: "문의 답변 대기 5건", checked: false },
+  { text: "중요 승인 대기 3건", checked: false },
+]);
+// 확인하지 않은 항목 필터링
+const uncheckedAlerts = computed(() => emergencyAlerts.value.filter((a) => !a.checked));
+
+onMounted(() => {
+  if (emergencyAlerts.value.length > 0) {
+    showEmergencyModal.value = true;
+  }
+});
+// 모니터링 페이지 이동
+// const goToMonitoring = () => {
+//   showEmergencyModal.value = false;
+//   router.push("/admin/monitoring");
+// };
 </script>
+<style scoped>
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
