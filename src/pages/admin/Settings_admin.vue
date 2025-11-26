@@ -96,7 +96,7 @@
         </div>
       </div>
       <!-- 통계 관리 -->
-      <div class="bg-white rounded-xl shadow-sm text-amber-900 dark:text-gray-300">
+      <div class="bg-white rounded-xl shadow-sm text-gray-200 dark:text-gray-300">
         <div class="bg-white-50 p-6 border-b text-gray-200 flex items-center gap-4">
           <i class="fas fa-chart-bar text-xl text-gray-400"></i>
           <h2 class="text-xl font-semibold text-gray-800">통계 관리</h2>
