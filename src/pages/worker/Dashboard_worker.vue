@@ -74,13 +74,13 @@
               <button
                 @click.stop="assignDelivery(index)"
                 :disabled="overlayItems[index]"
-                class="bg-white text-[#50311D] w-[100px] h-[80px] px-4 py-1 rounded-md text-lg font-[SpokaHanSansNeo] font-bold"
+                class="bg-white text-[#50311D] w-[100px] h-[80px] px-4 py-1 rounded-md text-lg font-[SpokaHanSansNeo] font-bold transition-all duration-300"
                 :class="{
                   'cursor-not-allowed opacity-50': overlayItems[index],
                   'cursor-pointer': !overlayItems[index],
                 }"
               >
-                배정
+                {{ overlayItems[index] ? "배정 중" : "배정" }}
               </button>
             </div>
           </div>
@@ -120,6 +120,42 @@
         <p class="text-gray-300 font-[SpokaHanSansNeo] py-2">진행 중인 목록이 없습니다.</p>
       </div>
     </div>
+
+    <!-- 배정 완료 모달 -->
+    <transition name="modal-fade">
+      <div v-if="showModal" class="fixed inset-0 z-[9999] flex items-center justify-center">
+        <!-- 오버레이 -->
+        <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
+
+        <!-- 모달 콘텐츠 -->
+        <div class="relative bg-white rounded-2xl w-[450px] mx-[20px] shadow-2xl transform transition-all">
+          <!-- 아이콘 -->
+          <div class="flex justify-center pt-8 pb-4">
+            <div class="w-[50px] h-[50px] bg-[#50311D] rounded-full flex items-center justify-center">
+              <i class="fa-solid fa-check text-white text-2xl"></i>
+            </div>
+          </div>
+
+          <!-- 메시지 -->
+          <div class="px-8 pb-6 text-center">
+            <h3 class="text-2xl font-[Cafe24Surround] text-[#50311D] mb-3">배정이 완료되었습니다!</h3>
+            <p class="text-gray-500 font-[SpokaHanSansNeo] text-[16px] leading-relaxed">
+              완료된 목록은 [진행탭]에서 확인해주세요!
+            </p>
+          </div>
+
+          <!-- 닫기 버튼 -->
+          <div class="px-4 pb-4">
+            <button
+              @click="closeModal"
+              class="w-full h-[50px] bg-[#50311D] text-white rounded-xl text-[16px] font-[SpokaHanSansNeo] cursor-pointer transition-colors active:scale-[0.98]"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -137,6 +173,7 @@ const modules = [Autoplay];
 const noticeList = ref(notices);
 
 const activeTab = ref("waiting");
+const showModal = ref(false);
 
 // 배송 정보 데이터
 const allDeliveryInfo = [
@@ -208,10 +245,24 @@ const formatDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+// activeTab 변경 감지
+watch(activeTab, async (newTab) => {
+  await nextTick();
+  await nextTick(); // 추가 nextTick으로 확실히 DOM 렌더링 완료
+
+  if (newTab === "progress" && progressList.value.length > 0) {
+    initProgressMaps();
+  } else if (newTab === "waiting" && waitingList.value.length > 0) {
+    initWaitingMaps();
+  }
+});
+
 const assignDelivery = (index) => {
+  // 1단계: 버튼 텍스트 변경 (배정 중)
   overlayItems.value[index] = true;
   animatingItems.value[index] = true;
 
+  // 2단계: 슬라이드 애니메이션 후 목록 이동
   setTimeout(async () => {
     const item = waitingList.value[index];
     progressList.value.push(item);
@@ -220,12 +271,23 @@ const assignDelivery = (index) => {
     delete overlayItems.value[index];
     delete animatingItems.value[index];
 
+    // ✅ nextTick을 두 번 사용하여 DOM 업데이트 보장
     await nextTick();
+    await nextTick();
+
+    // 진행 탭의 지도 초기화
     initProgressMaps();
+
+    // 3단계: 모달 표시
+    showModal.value = true;
   }, 600);
 };
 
-// 지도 초기화 (원본 그대로)
+const closeModal = () => {
+  showModal.value = false;
+};
+
+// 지도 초기화
 const initWaitingMaps = () => {
   if (!window.kakao || !window.kakao.maps) return;
   waitingMaps.value = [];
@@ -320,14 +382,7 @@ const initProgressMaps = () => {
   });
 };
 
-// watch(activeTab, async () => {
-//   await nextTick();
-//   if (activeTab.value === "waiting") initWaitingMaps();
-//   else initProgressMaps();
-// });
-
 onMounted(() => {
-  // query.tab이 있으면 사용, 없으면 'waiting'을 기본값으로
   activeTab.value = route.query.tab || "waiting";
 
   if (window.kakao && window.kakao.maps) {
@@ -340,11 +395,10 @@ onMounted(() => {
     });
   }
 });
-// watch 수정
+
 watch(
   () => route.query.tab,
   async (newTab) => {
-    // newTab이 undefined거나 빈 문자열이면 'waiting'으로
     activeTab.value = newTab || "waiting";
     await nextTick();
     if (activeTab.value === "progress") initProgressMaps();
@@ -379,5 +433,31 @@ watch(
 /* 리스트 위치 이동 부드럽게 */
 .slide-move {
   transition: transform 0.5s ease;
+}
+
+/* 모달 페이드 애니메이션 */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+.modal-fade-enter-active .relative,
+.modal-fade-leave-active .relative {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal-fade-enter-from .relative {
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+.modal-fade-leave-to .relative {
+  transform: scale(0.9);
+  opacity: 0;
 }
 </style>
