@@ -18,11 +18,14 @@
             </div>
             <label class="relative inline-flex items-center cursor-pointer ml-4">
               <input type="checkbox" class="sr-only peer" v-model="settings[ntification.key]" />
-              <div
-                class="w-11 h-6 bg-amber-800 peer-focus:outline-none peer-focus:ring-2 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+               <div
+                class="w-11 h-6 bg-[#BA8E5F] peer-focus:outline-none peer-focus:ring-2
+                 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full
+                  peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] 
+                  after:left-[2px]
                  after:bg-white
                  after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
-                 peer-checked:bg-[#A36031]">
+                 peer-checked:bg-[#BA8E5F]">
               </div>
             </label>
           </div>
@@ -43,10 +46,10 @@
             <label class="relative inline-flex items-center cursor-pointer ml-4">
               <input type="checkbox" v-model="settings.autoSave" class="sr-only peer" />
               <div
-                class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full
-                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-                  after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
-                   peer-checked:bg-[#A36031]">
+                class="w-11 h-6 bg-amber-800 peer-focus:outline-none peer-focus:ring-2 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                 after:bg-white peer-focus:ring-[#A36031]
+                 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
+                 peer-checked:bg-[#BA8E5F]">
               </div>
             </label>
           </div>
@@ -54,7 +57,7 @@
           <div class="border-t pt-6">
             <h3 class="text-gray-800 font-medium mb-3">세션 타임아웃</h3>
             <select v-model="settings.sessionTimeout"
-              class="w-full px-4 py-2 border text-gray-900 border-gray-400 rounded-lg focus:ring-2 focus:ring-amber-800 border-gray-900">
+              class="w-full px-4 py-2 border text-gray-900 border-gray-400 rounded-lg focus:ring-2 focus:ring-[#A36031] border-gray-900">
               <option value="15">15분</option>
               <option value="30">30분</option>
               <option value="60">1시간</option>
@@ -110,7 +113,7 @@
             <label class="relative inline-flex items-center cursor-pointer ml-4">
            <input type="checkbox" v-model="settings.dailyReport" class="sr-only peer" />
               <div
-                class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-amber-700 rounded-full peer peer-checked:after:translate-x-full
+                class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#A36031] rounded-full peer peer-checked:after:translate-x-full
                  peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
                   after:bg-white
                    after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all
@@ -121,7 +124,7 @@
           <div class="border-t pt-6">
             <h3 class="text-gray-800 font-medium mb-3">보고서 형식</h3>
             <select v-model="settings.reportFormat"
-              class="w-full px-4 py-2 border text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-900 border-gray-900">
+              class="w-full px-4 py-2 border text-gray-900 rounded-lg focus:ring-2 focus:ring-[#A36031] border-gray-900">
               <option value="pdf">PDF</option>
               <option value="excel">Excel</option>
               <option value="csv">CSV</option>
