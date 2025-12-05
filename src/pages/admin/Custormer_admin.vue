@@ -81,7 +81,7 @@
             @input="handleInput"
             type="text"
             placeholder="고객명 또는 제목으로 검색하세요"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#E67E50] focus:border-transparent" />
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#A36031] focus:border-transparent" />
           <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
         </div>
       </div>
@@ -207,7 +207,7 @@
             @click="gotoPage(page)"
             :class="[
               currentPage === page
-                ? 'bg-[#E67E50] text-white border-[#E67E50]'
+                ? 'bg-[#BA8E5F] text-white border-[#BA8E5F]'
                 : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300',
               'px-3 py-1 border rounded',
             ]">
