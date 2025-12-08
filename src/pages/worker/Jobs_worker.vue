@@ -1,20 +1,20 @@
 <template>
   <div class="w-full max-w-[768px] mx-auto font-[SpokaHanSansNeo] font-normal relative" style="height: 100vh">
     <!-- 배송 목록 화면 -->
-    <div v-show="showDeliveryList" class="w-full h-full bg-white overflow-y-auto pb-25">
+    <div v-show="showDeliveryList" class="w-full h-full bg-white overflow-y-auto pb-20 sm:pb-25">
       <div>
         <!-- 상단 고정 (진행 정보 + 탭) -->
-        <div class="h-[120px] w-full max-w-[750px] fixed bg-white z-999 pl-[25px] pt-2">
+        <div class="h-[110px] sm:h-[120px] w-full max-w-[768px] fixed bg-white z-999 pl-4 sm:pl-[25px] pr-23 sm:pr-[90px] pt-2">
           <div class="w-full max-w-[600px] flex flex-col gap-2">
             <!-- 진행 문구 -->
-            <div class="flex place-content-between items-center mt-4">
-              <p class="text-xl">{{ remainingCount }}건만 더 하면 배달 완료! 힘내세요!</p>
-              <span>{{ remainingCount }}/{{ totalCount }}</span>
+            <div class="flex place-content-between items-center mt-3 sm:mt-4">
+              <p class="text-base sm:text-xl">{{ remainingCount }}건만 더 하면 배달 완료! <span class="hidden sm:inline">힘내세요!</span></p>
+              <span class="text-sm sm:text-base">{{ remainingCount }}/{{ totalCount }}</span>
             </div>
 
             <!-- 프로그레스바 -->
-            <div class="w-full mb-2 mt-2">
-              <div class="w-full h-3 bg-gray-200 rounded-full">
+            <div class="w-full mb-2 mt-1 sm:mt-2">
+              <div class="w-full h-2.5 sm:h-3 bg-gray-200 rounded-full">
                 <div
                   class="h-full bg-[#50311D] rounded-full transition-all duration-500 ease-out"
                   :style="{ width: progressPercent + '%' }"
@@ -24,13 +24,13 @@
           </div>
 
           <!-- 탭 필터 (전체 / 배정순 / 픽업 / 배송 / 완료) -->
-          <div class="flex gap-2 items-center mt-2">
+          <div class="flex gap-1.5 sm:gap-2 items-center mt-2 overflow-x-auto scrollbar-hide">
             <button
               v-for="tab in tabs"
               :key="tab.key"
               @click="setFilter(tab.key)"
               :class="[
-                'px-3 py-1 rounded-md text-sm',
+                'px-2.5 sm:px-3 py-1 rounded-md text-xs sm:text-sm whitespace-nowrap flex-shrink-0',
                 currentFilter === tab.key ? 'bg-[#50311D] text-white' : 'bg-gray-100 text-gray-700',
               ]"
             >
@@ -40,13 +40,12 @@
         </div>
 
         <!-- 배송 카드들 (transition-group: reorder 애니메이션) -->
-        <!-- ✅ 수정: :key에 currentFilter 추가하여 필터 변경 시 깨끗한 전환 -->
-        <div class="space-y-4 pt-[140px] px-6" :key="currentFilter">
+        <div class="space-y-3 sm:space-y-4 pt-[120px] sm:pt-[140px] px-4 sm:px-6" :key="currentFilter">
           <transition-group name="list" tag="div">
             <div
               v-for="delivery in filteredDeliveryList"
               :key="delivery.reservationNo"
-              class="rounded-lg transition-opacity duration-300 shadow-md relative overflow-hidden mb-5"
+              class="rounded-lg transition-opacity duration-300 shadow-md relative overflow-hidden mb-4 sm:mb-5"
               :class="[
                 'bg-white',
                 delivery.status === 'completed' ? 'opacity-60' : '',
@@ -56,52 +55,54 @@
             >
               <!-- 배송카드 상단 예약정보 및 손님정보 -->
               <div
-                class="flex justify-between items-start p-5 rounded-t-lg"
+                class="flex justify-between items-start p-3 sm:p-5 rounded-t-lg"
                 :class="delivery.status === 'completed' ? 'bg-gray-300' : 'bg-[#ba8e5f]'"
               >
-                <p class="text-sm text-gray-50">예약 번호: {{ delivery.reservationNo }}</p>
-                <p class="text-sm text-gray-50">{{ delivery.customerName }} ·                 <a
-                  v-if="selectedMarker?.phone"
-                  :href="'tel:' + formatTelHref(delivery.phone)"
-                  class="text-gray-50 text-sm underline"
-                >{{ delivery.phone }}</a></p>
+                <p class="text-xs sm:text-sm text-gray-50">예약: {{ delivery.reservationNo }}</p>
+                <p class="text-xs sm:text-sm text-gray-50">
+                  {{ delivery.customerName }} · 
+                  <a
+                    v-if="delivery.phone"
+                    :href="'tel:' + formatTelHref(delivery.phone)"
+                    class="text-gray-50 underline"
+                  >{{ delivery.phone }}</a>
+                </p>
               </div>
 
-              <div class="flex justify-between items-end p-5">
+              <div class="flex justify-between items-end p-3 sm:p-5">
                 <!-- 픽업장소 및 배달장소 -->
-                <div class="flex flex-col items-start gap-[15px]">
-                  <div class="flex">
-                    <div class="relative bg-[#ba8e5f] w-[40px] h-[40px] rounded-4xl mr-4">
+                <div class="flex flex-col items-start gap-3 sm:gap-[15px]">
+                  <div class="flex items-center">
+                    <div class="relative bg-[#ba8e5f] w-8 h-8 sm:w-[40px] sm:h-[40px] rounded-full mr-2 sm:mr-4 flex-shrink-0">
                       <p
-                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[13px] text-white font-[SpokaHanSansNeo]"
+                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[11px] sm:text-[13px] text-white font-[SpokaHanSansNeo]"
                       >
                         픽업
                       </p>
                     </div>
-                    <p class="text-base my-2">{{ delivery.storeName }}</p>
+                    <p class="text-sm sm:text-base my-2">{{ delivery.storeName }}</p>
                   </div>
-                  <div class="flex">
-                    <div class="relative bg-[#50311d] w-[40px] h-[40px] rounded-4xl mr-4">
+                  <div class="flex items-center">
+                    <div class="relative bg-[#50311d] w-8 h-8 sm:w-[40px] sm:h-[40px] rounded-full mr-2 sm:mr-4 flex-shrink-0">
                       <p
-                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[13px] text-white font-[SpokaHanSansNeo]"
+                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[11px] sm:text-[13px] text-white font-[SpokaHanSansNeo]"
                       >
                         배달
                       </p>
                     </div>
-                    <p class="text-base my-2">보관지점: {{ delivery.storage }}</p>
+                    <p class="text-sm sm:text-base my-2">보관지점: {{ delivery.storage }}</p>
                   </div>
                 </div>
 
                 <!-- 배달리스트 상태 버튼 -->
-                <div class="text-sm text-gray-600 space-y-1 flex flex-col items-end gap-[35px]">
+                <div class="text-sm text-gray-600 space-y-1 flex flex-col items-end gap-8 sm:gap-[35px]">
                   <!-- 간단한 취소 버튼 (리스트에서도 취소 가능) -->
-                  <button @click="cancelFromList(delivery)" class="mt-1 text-xs text-gray-500 underline">주문취소하기</button>
+                  <button @click="cancelFromList(delivery)" class="mt-1 text-[10px] sm:text-xs text-gray-500 underline">주문취소</button>
                   
-                  <!-- ✅ 수정: 상태 버튼에 진행 중 상태 표시 추가 -->
                   <button
                     @click="clickStatusChange(delivery)"
                     :disabled="delivery.status === 'completed'"
-                    class="px-4 py-2 text-white text-sm rounded transition-all duration-300"
+                    class="px-3 py-1.5 sm:px-4 sm:py-2 text-white text-xs sm:text-sm rounded transition-all duration-300 whitespace-nowrap"
                     :class="[
                       getStatusClass(delivery.status, bufferingSet.has(delivery.reservationNo)),
                       delivery.status === 'completed'
@@ -126,10 +127,10 @@
       <transition name="slide-up">
         <div
           v-if="showPanel"
-          class="w-full h-[400px] bg-white absolute bottom-0 left-0 z-999 text-center rounded-t-[1vw] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)]"
+          class="w-full h-[360px] sm:h-[400px] bg-white absolute bottom-0 left-0 z-999 text-center rounded-t-2xl sm:rounded-t-[1vw] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)]"
         >
-          <div class="w-full flex flex-row-reverse pt-[25px] pb-[15px] px-[50px]">
-            <i @click="handleClose" class="fa-solid fa-x text-gray-500 cursor-pointer"></i>
+          <div class="w-full flex flex-row-reverse pt-4 sm:pt-[25px] pb-3 sm:pb-[15px] px-6 sm:px-[50px]">
+            <i @click="handleClose" class="fa-solid fa-x text-gray-500 cursor-pointer text-sm sm:text-base"></i>
           </div>
 
           <!-- 로딩/버퍼 표시 (마커 전환 시) -->
@@ -151,47 +152,47 @@
                   class="opacity-75"
                 ></path>
               </svg>
-              <span>로딩 중...</span>
+              <span class="text-sm">로딩 중...</span>
             </div>
           </div>
 
-          <div v-else class="flex place-content-between mt-[15px] mx-[50px]">
-            <div class="flex flex-col gap-4 text-start">
+          <div v-else class="flex flex-col sm:flex-row sm:place-content-between mt-3 sm:mt-[15px] mx-6 sm:mx-[50px] gap-4 sm:gap-0">
+            <div class="flex flex-col gap-3 sm:gap-4 text-start">
               <div class="flex">
-                <p class="text-gray-400 text-[16px] w-[120px] font">예약번호</p>
-                <span class="text-gray-800 text-base">{{ selectedMarker?.reservationNo || "—" }}</span>
+                <p class="text-gray-400 text-sm sm:text-[16px] w-20 sm:w-[120px]">예약번호</p>
+                <span class="text-gray-800 text-sm sm:text-base">{{ selectedMarker?.reservationNo || "—" }}</span>
               </div>
               <div class="flex">
-                <p class="text-gray-400 text-base w-[120px]">이름</p>
-                <span class="text-gray-800 text-base">{{ selectedMarker?.customerName || "—" }}</span>
+                <p class="text-gray-400 text-sm sm:text-base w-20 sm:w-[120px]">이름</p>
+                <span class="text-gray-800 text-sm sm:text-base">{{ selectedMarker?.customerName || "—" }}</span>
               </div>
               <div class="flex items-center">
-                <p class="text-gray-400 text-base w-[120px]">전화번호</p>
+                <p class="text-gray-400 text-sm sm:text-base w-20 sm:w-[120px]">전화번호</p>
                 <a
                   v-if="selectedMarker?.phone"
                   :href="'tel:' + formatTelHref(selectedMarker.phone)"
-                  class="text-gray-800 text-base underline"
+                  class="text-gray-800 text-sm sm:text-base underline"
                 >
-                <i class="fa-solid fa-phone text-gray-500 text-sm"></i>
+                <i class="fa-solid fa-phone text-gray-500 text-xs sm:text-sm mr-1"></i>
                   {{ selectedMarker.phone }}
                 </a>
-                <span v-else class="text-gray-800 text-base">—</span>
+                <span v-else class="text-gray-800 text-sm sm:text-base">—</span>
               </div>
             </div>
 
-            <div class="flex flex-col gap-4 text-start">
+            <div class="flex flex-col gap-3 sm:gap-4 text-start">
               <div class="flex">
-                <p class="text-gray-400 text-base w-[120px]">픽업지점</p>
-                <span class="text-gray-800 text-base">{{ selectedMarker?.title || "—" }}</span>
+                <p class="text-gray-400 text-sm sm:text-base w-20 sm:w-[120px]">픽업지점</p>
+                <span class="text-gray-800 text-sm sm:text-base">{{ selectedMarker?.title || "—" }}</span>
               </div>
               <div class="flex">
-                <p class="text-gray-400 text-base w-[120px]">보관지점</p>
-                <span class="text-gray-800 text-base">{{ selectedMarker?.storage || "—" }}</span>
+                <p class="text-gray-400 text-sm sm:text-base w-20 sm:w-[120px]">보관지점</p>
+                <span class="text-gray-800 text-sm sm:text-base">{{ selectedMarker?.storage || "—" }}</span>
               </div>
               <div class="flex">
-                <p class="text-gray-400 text-base w-[120px]">상태</p>
+                <p class="text-gray-400 text-sm sm:text-base w-20 sm:w-[120px]">상태</p>
                 <span
-                  class="text-base font-semibold"
+                  class="text-sm sm:text-base font-semibold"
                   :class="{
                     'text-[#E67E50]': deliveryStatus === 'pickup',
                     'text-[#00ADD8]': deliveryStatus === 'delivering',
@@ -207,16 +208,16 @@
           <button
             v-if="deliveryStatus !== 'completed'"
             @click="handleCancel"
-            class="underline text-sm text-gray-700 mt-[30px] cursor-pointer hover:text-gray-900"
+            class="underline text-xs sm:text-sm text-gray-700 mt-5 sm:mt-[30px] cursor-pointer hover:text-gray-900"
           >
             배송 취소하기
           </button>
 
-          <div class="mt-[30px]">
+          <div class="mt-5 sm:mt-[30px] px-6 sm:px-0">
             <button
               v-if="deliveryStatus === 'pickup'"
               @click="handlePickupComplete"
-              class="w-[700px] h-[60px] bg-[#E67E50] text-white rounded-md cursor-pointer hover:bg-[#D66940] transition-colors"
+              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-[#E67E50] text-white text-sm sm:text-base rounded-md cursor-pointer hover:bg-[#D66940] transition-colors"
             >
               픽업 완료
             </button>
@@ -224,7 +225,7 @@
             <button
               v-else-if="deliveryStatus === 'delivering'"
               @click="handleDeliveryComplete"
-              class="w-[700px] h-[60px] bg-[#00ADD8] text-white rounded-md cursor-pointer hover:bg-[#15A4C8] transition-colors"
+              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-[#00ADD8] text-white text-sm sm:text-base rounded-md cursor-pointer hover:bg-[#15A4C8] transition-colors"
             >
               배송 완료
             </button>
@@ -232,7 +233,7 @@
             <button
               v-else-if="deliveryStatus === 'completed'"
               @click="handleClose"
-              class="w-[700px] h-[60px] bg-gray-400 text-white rounded-md cursor-not-allowed"
+              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-gray-400 text-white text-sm sm:text-base rounded-md cursor-not-allowed"
             >
               ✓ 배송 완료됨 - 닫기
             </button>
@@ -244,11 +245,11 @@
     <!-- 토글 버튼 -->
     <div
       @click="workToggle"
-      class="w-[50px] h-[50px] bg-[#50311D] absolute top-[35px] right-[40px] rounded-full z-[999] transform translate-z-0 cursor-pointer"
+      class="w-12 h-12 sm:w-[50px] sm:h-[50px] bg-[#50311D] absolute top-6 sm:top-[35px] right-5 sm:right-[40px] rounded-full z-[999] transform translate-z-0 cursor-pointer shadow-lg"
     >
       <i
         :class="showDeliveryList ? 'fa-map' : 'fa-bars'"
-        class="fa-solid absolute top-[50%] left-[50%] w-full -translate-x-[50%] -translate-y-[50%] text-white text-center text-2xl"
+        class="fa-solid absolute top-[50%] left-[50%] w-full -translate-x-[50%] -translate-y-[50%] text-white text-center text-xl sm:text-2xl"
       ></i>
     </div>
   </div>
