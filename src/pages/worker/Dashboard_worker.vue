@@ -7,7 +7,7 @@
     <div class="flex gap-2 items-center rounded-md bg-gray-100 p-3 mx-4 md:mx-[20px] my-4 md:my-[20px]">
       <i class="fa-solid fa-bullhorn text-red-600"></i>
       <!-- 알림 스와이퍼 -->
-      <div>
+      <div class="flex-1 min-w-0">
         <Swiper
           :direction="'vertical'"
           :loop="true"
@@ -18,7 +18,10 @@
           <SwiperSlide
             v-for="(n, i) in noticeList"
             :key="i"
-            class="flex max-w-[310px] items-center justify-center text-[14px] font-[SpokaHanSansNeo] overflow-hidden text-ellipsis whitespace-nowrap"
+            class="flex items-center text-[14px] font-[SpokaHanSansNeo]
+       min-w-0 max-w-[310px]
+       overflow-hidden text-ellipsis whitespace-nowrap
+       sm:max-w-none sm:overflow-visible sm:whitespace-normal sm:text-clip"
           >
             {{ n.message }}
           </SwiperSlide>
