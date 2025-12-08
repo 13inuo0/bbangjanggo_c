@@ -453,16 +453,24 @@ const selectMarkerWithBuffer = (info, markerInstance) => {
     // ✅ 추가: 선택된 마커 이미지 변경
     updateMarkerImageByReservation(info.reservationNo, true);
 
-    if (map && markerInstance) {
-      const markerPosition = markerInstance.getPosition();
-      
-      // 먼저 마커로 이동
-      map.setCenter(markerPosition);
-      
-      // 그 다음 패널 높이만큼 지도를 위로 팬 (픽셀 단위)
-      // 패널이 420px이므로 약 210px 정도 아래로 팬
-      map.panBy(0, 210);
-    }
+if (map && markerInstance) {
+  const markerPosition = markerInstance.getPosition();
+  
+  // 현재 지도의 투영 객체
+  const projection = map.getProjection();
+  
+  // 마커 위치를 화면 픽셀 좌표로 변환
+  const markerPixel = projection.containerPointFromCoords(markerPosition);
+  
+  // 210px 아래 지점의 픽셀 좌표 계산
+  const targetPixel = new kakao.maps.Point(markerPixel.x, markerPixel.y + 210);
+  
+  // 픽셀 좌표를 다시 지도 좌표로 변환
+  const targetCoords = projection.coordsFromContainerPoint(targetPixel);
+  
+  // 목표 지점으로 부드럽게 이동
+  map.panTo(targetCoords);
+}
   }, 300);
 };
 
