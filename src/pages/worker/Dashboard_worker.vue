@@ -18,7 +18,7 @@
           <SwiperSlide
             v-for="(n, i) in noticeList"
             :key="i"
-            class="flex items-center justify-center text-[14px] font-[SpokaHanSansNeo]"
+            class="flex max-w-[310px] items-center justify-center text-[14px] font-[SpokaHanSansNeo] overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {{ n.message }}
           </SwiperSlide>
