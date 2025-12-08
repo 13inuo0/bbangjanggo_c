@@ -1,10 +1,10 @@
 <template>
-  <div class="h-screen w-[768px] m-auto">
+  <div class="h-screen w-full max-w-[768px] mx-auto">
     <div class="flex flex-col gap-[50px] justify-center items-center h-full">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-      <h3 class="font-[Cafe24Surround] text-[30px] text-center text-[#50311D]">로그인</h3>
+      <h3 class="font-[Cafe24Surround] text-[24px] sm:text-[30px] text-center text-[#50311D]">로그인</h3>
       <!-- 관리자 구분 탭 -->
-      <div class="w-[335px] rounded-lg border border-[#50311D] overflow-hidden relative">
+      <div class="w-full max-w-[335px] rounded-lg border border-[#50311D] overflow-hidden relative">
         <!-- 슬라이드 배경 -->
         <div
           class="absolute top-0 left-0 w-[50%] h-full bg-[#50311D] rounded-sm transition-transform duration-300 ease-in-out"
@@ -29,7 +29,7 @@
         </div>
       </div>
       <!-- 로그인 -->
-      <form @submit.prevent="handleLogin" class="w-full px-[85px] space-y-6">
+      <form @submit.prevent="handleLogin" class="w-full max-w-[768px] px-6 sm:px-[85px] space-y-6">
         <div class="space-y-2">
           <input
             type="text"
