@@ -301,7 +301,7 @@ const combinedStats = computed(() => {
       bgColor: "bg-gray-100 dark:bg-gray-700",
     },
     {
-      title: "총 매출",
+      title: "총매출",
       monthValue: formatCurrency(totalRevenue),
       weekValue: formatCurrency(recentWeeklyRevenue.value),
       icon: "fas fa-dollar-sign",
