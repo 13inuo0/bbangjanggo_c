@@ -550,6 +550,13 @@
       <button class="absolute right-3 top-3 text-gray-500 hover:text-gray-700" @click="closeDaumPostcode">
         <i class="fas fa-times"></i>
       </button>
+      <img
+        src="//t1.daumcdn.net/postcode/resource/images/close.png"
+        id="btnFoldWrap"
+        class="cursor-pointer absolute right-[0px] top-[0px] z-10"
+        @click="closeDaumPostcode"
+        alt="접기 버튼"
+      />
       <div ref="postcodeLayer" class="w-full h-full"></div>
     </div>
   </div>
