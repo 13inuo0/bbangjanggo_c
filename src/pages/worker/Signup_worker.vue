@@ -70,7 +70,7 @@
           </button>
         </div>
         <!-- 인증 실패 메시지 -->
-        <p v-if="codeMessage" class="mt-2 text-[#00ADD8] text-sm font-[SpokaHanSansNeo]">
+        <p v-if="codeMessage" class="mt-2 text-[#E67E50] text-sm font-[SpokaHanSansNeo]">
           {{ codeMessage }}
         </p>
       </div>
