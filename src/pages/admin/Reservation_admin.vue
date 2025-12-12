@@ -662,7 +662,7 @@ const generateDummyData = () => {
   const data = [];
   for (let i = 1; i <= 50; i++) {
     const startDate = new Date(2025, 10, 26);
-    const endDate = new Date(2025, 11, 13);
+    const endDate = new Date(2025, 11, 14);
     const randomDate = new Date(startDate.getTime() + Math.random() * (endDate - startDate));
     const dispatchStatus = dispatchStatuses[Math.floor(Math.random() * dispatchStatuses.length)];
     const hour = String(10 + Math.floor(i / 5)).padStart(2, "0");
