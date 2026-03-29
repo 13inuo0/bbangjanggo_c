@@ -4,11 +4,14 @@
     <div v-show="showDeliveryList" class="w-full h-full bg-white overflow-y-auto pb-20 sm:pb-25">
       <div>
         <!-- 상단 고정 (진행 정보 + 탭) -->
-        <div class="h-[110px] sm:h-[120px] w-full max-w-[768px] fixed bg-white z-999 pl-4 sm:pl-[25px] pr-23 sm:pr-[90px] pt-2">
+        <div
+          class="h-[110px] sm:h-[120px] w-full max-w-[768px] fixed bg-white z-999 pl-4 sm:pl-[25px] pr-23 sm:pr-[90px] pt-2">
           <div class="w-full max-w-[600px] flex flex-col gap-2">
             <!-- 진행 문구 -->
             <div class="flex place-content-between items-center mt-3 sm:mt-4">
-              <p class="text-base sm:text-xl">{{ remainingCount }}건만 더 하면 배달 완료! <span class="hidden sm:inline">힘내세요!</span></p>
+              <p class="text-base sm:text-xl">
+                {{ remainingCount }}건만 더 하면 배달 완료! <span class="hidden sm:inline">힘내세요!</span>
+              </p>
               <span class="text-sm sm:text-base">{{ remainingCount }}/{{ totalCount }}</span>
             </div>
 
@@ -17,8 +20,7 @@
               <div class="w-full h-2.5 sm:h-3 bg-gray-200 rounded-full">
                 <div
                   class="h-full bg-[#50311D] rounded-full transition-all duration-500 ease-out"
-                  :style="{ width: progressPercent + '%' }"
-                ></div>
+                  :style="{ width: progressPercent + '%' }"></div>
               </div>
             </div>
           </div>
@@ -32,8 +34,7 @@
               :class="[
                 'px-2.5 sm:px-3 py-1 rounded-md text-xs sm:text-sm whitespace-nowrap flex-shrink-0',
                 currentFilter === tab.key ? 'bg-[#50311D] text-white' : 'bg-gray-100 text-gray-700',
-              ]"
-            >
+              ]">
               {{ tab.label }}
             </button>
           </div>
@@ -50,22 +51,21 @@
                 'bg-white',
                 delivery.status === 'completed' ? 'opacity-60' : '',
                 bufferingSet.has(delivery.reservationNo) ? 'buffering' : '',
-                shiftingSet.has(delivery.reservationNo) ? 'slide-out-left' : '',
-              ]"
-            >
+                shiftingSet.has(delivery.reservationNo) ? 'slide-out-right' : '',
+              ]">
               <!-- 배송카드 상단 예약정보 및 손님정보 -->
               <div
                 class="flex justify-between items-start p-3 sm:p-5 rounded-t-lg"
-                :class="delivery.status === 'completed' ? 'bg-gray-300' : 'bg-[#ba8e5f]'"
-              >
+                :class="delivery.status === 'completed' ? 'bg-gray-300' : 'bg-[#ba8e5f]'">
                 <p class="text-xs sm:text-sm text-gray-50">예약: {{ delivery.reservationNo }}</p>
                 <p class="text-xs sm:text-sm text-gray-50">
-                  {{ delivery.customerName }} · 
+                  {{ delivery.customerName }} ·
                   <a
                     v-if="delivery.phone"
                     :href="'tel:' + formatTelHref(delivery.phone)"
                     class="text-gray-50 underline"
-                  >{{ delivery.phone }}</a>
+                    >{{ delivery.phone }}</a
+                  >
                 </p>
               </div>
 
@@ -73,20 +73,20 @@
                 <!-- 픽업장소 및 배달장소 -->
                 <div class="flex flex-col items-start gap-3 sm:gap-[15px]">
                   <div class="flex items-center">
-                    <div class="relative bg-[#ba8e5f] w-8 h-8 sm:w-[40px] sm:h-[40px] rounded-full mr-2 sm:mr-4 flex-shrink-0">
+                    <div
+                      class="relative bg-[#ba8e5f] w-8 h-8 sm:w-[40px] sm:h-[40px] rounded-full mr-2 sm:mr-4 flex-shrink-0">
                       <p
-                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[11px] sm:text-[13px] text-white font-[SpokaHanSansNeo]"
-                      >
+                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[11px] sm:text-[13px] text-white font-[SpokaHanSansNeo]">
                         픽업
                       </p>
                     </div>
                     <p class="text-sm sm:text-base my-2">{{ delivery.storeName }}</p>
                   </div>
                   <div class="flex items-center">
-                    <div class="relative bg-[#50311d] w-8 h-8 sm:w-[40px] sm:h-[40px] rounded-full mr-2 sm:mr-4 flex-shrink-0">
+                    <div
+                      class="relative bg-[#50311d] w-8 h-8 sm:w-[40px] sm:h-[40px] rounded-full mr-2 sm:mr-4 flex-shrink-0">
                       <p
-                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[11px] sm:text-[13px] text-white font-[SpokaHanSansNeo]"
-                      >
+                        class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] whitespace-nowrap text-[11px] sm:text-[13px] text-white font-[SpokaHanSansNeo]">
                         배달
                       </p>
                     </div>
@@ -97,8 +97,10 @@
                 <!-- 배달리스트 상태 버튼 -->
                 <div class="text-sm text-gray-600 space-y-1 flex flex-col items-end gap-8 sm:gap-[35px]">
                   <!-- 간단한 취소 버튼 (리스트에서도 취소 가능) -->
-                  <button @click="cancelFromList(delivery)" class="mt-1 text-[10px] sm:text-xs text-gray-500 underline">주문취소</button>
-                  
+                  <button @click="cancelFromList(delivery)" class="mt-1 text-[10px] sm:text-xs text-gray-500 underline">
+                    주문취소
+                  </button>
+
                   <button
                     @click="clickStatusChange(delivery)"
                     :disabled="delivery.status === 'completed'"
@@ -108,8 +110,7 @@
                       delivery.status === 'completed'
                         ? 'cursor-not-allowed'
                         : 'cursor-pointer hover:opacity-80 active:scale-95',
-                    ]"
-                  >
+                    ]">
                     {{ getStatusText(delivery.status, bufferingSet.has(delivery.reservationNo)) }}
                   </button>
                 </div>
@@ -127,8 +128,7 @@
       <transition name="slide-up">
         <div
           v-if="showPanel"
-          class="w-full h-[420px] sm:h-[420px] bg-white absolute bottom-0 left-0 z-999 text-center rounded-t-2xl sm:rounded-t-[1vw] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)] pb-8 sm:pb-0"
-        >
+          class="w-full h-[420px] sm:h-[420px] bg-white absolute bottom-0 left-0 z-999 text-center rounded-t-2xl sm:rounded-t-[1vw] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)] pb-8 sm:pb-0">
           <div class="w-full flex flex-row-reverse pt-4 sm:pt-[25px] pb-3 sm:pb-[15px] px-6 sm:px-[50px]">
             <i @click="handleClose" class="fa-solid fa-x text-gray-500 cursor-pointer text-sm sm:text-base"></i>
           </div>
@@ -144,19 +144,19 @@
                   stroke="currentColor"
                   stroke-width="4"
                   fill="none"
-                  class="opacity-25"
-                ></circle>
+                  class="opacity-25"></circle>
                 <path
                   fill="currentColor"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  class="opacity-75"
-                ></path>
+                  class="opacity-75"></path>
               </svg>
               <span class="text-sm">로딩 중...</span>
             </div>
           </div>
 
-          <div v-else class="flex flex-col sm:flex-row sm:place-content-between mt-3 sm:mt-[15px] mx-6 sm:mx-[50px] gap-4 sm:gap-0">
+          <div
+            v-else
+            class="flex flex-col sm:flex-row sm:place-content-between mt-3 sm:mt-[15px] mx-6 sm:mx-[50px] gap-4 sm:gap-0">
             <div class="flex flex-col gap-3 sm:gap-4 text-start">
               <div class="flex">
                 <p class="text-gray-400 text-sm sm:text-[16px] w-20 sm:w-[120px]">예약번호</p>
@@ -171,9 +171,8 @@
                 <a
                   v-if="selectedMarker?.phone"
                   :href="'tel:' + formatTelHref(selectedMarker.phone)"
-                  class="text-gray-800 text-sm sm:text-base underline"
-                >
-                <i class="fa-solid fa-phone text-gray-500 text-xs sm:text-sm mr-1"></i>
+                  class="text-gray-800 text-sm sm:text-base underline">
+                  <i class="fa-solid fa-phone text-gray-500 text-xs sm:text-sm mr-1"></i>
                   {{ selectedMarker.phone }}
                 </a>
                 <span v-else class="text-gray-800 text-sm sm:text-base">—</span>
@@ -197,8 +196,7 @@
                     'text-[#E67E50]': deliveryStatus === 'pickup',
                     'text-[#00ADD8]': deliveryStatus === 'delivering',
                     'text-gray-400': deliveryStatus === 'completed',
-                  }"
-                >
+                  }">
                   {{ statusText }}
                 </span>
               </div>
@@ -208,8 +206,7 @@
           <button
             v-if="deliveryStatus !== 'completed'"
             @click="handleCancel"
-            class="underline text-xs sm:text-sm text-gray-700 mt-5 sm:mt-[30px] cursor-pointer hover:text-gray-900"
-          >
+            class="underline text-xs sm:text-sm text-gray-700 mt-5 sm:mt-[30px] cursor-pointer hover:text-gray-900">
             배송 취소하기
           </button>
 
@@ -217,24 +214,21 @@
             <button
               v-if="deliveryStatus === 'pickup'"
               @click="handlePickupComplete"
-              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-[#E67E50] text-white text-sm sm:text-base rounded-md cursor-pointer hover:bg-[#D66940] transition-colors"
-            >
+              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-[#E67E50] text-white text-sm sm:text-base rounded-md cursor-pointer hover:bg-[#D66940] transition-colors">
               픽업 완료
             </button>
 
             <button
               v-else-if="deliveryStatus === 'delivering'"
               @click="handleDeliveryComplete"
-              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-[#00ADD8] text-white text-sm sm:text-base rounded-md cursor-pointer hover:bg-[#15A4C8] transition-colors"
-            >
+              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-[#00ADD8] text-white text-sm sm:text-base rounded-md cursor-pointer hover:bg-[#15A4C8] transition-colors">
               배송 완료
             </button>
 
             <button
               v-else-if="deliveryStatus === 'completed'"
               @click="handleClose"
-              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-gray-400 text-white text-sm sm:text-base rounded-md cursor-not-allowed"
-            >
+              class="w-full sm:w-[700px] h-[50px] sm:h-[60px] bg-gray-400 text-white text-sm sm:text-base rounded-md cursor-not-allowed">
               ✓ 배송 완료됨 - 닫기
             </button>
           </div>
@@ -245,12 +239,10 @@
     <!-- 토글 버튼 -->
     <div
       @click="workToggle"
-      class="w-12 h-12 sm:w-[50px] sm:h-[50px] bg-[#50311D] absolute top-6 sm:top-[35px] right-5 sm:right-[40px] rounded-full z-[999] transform translate-z-0 cursor-pointer shadow-lg"
-    >
+      class="w-12 h-12 sm:w-[50px] sm:h-[50px] bg-[#50311D] absolute top-6 sm:top-[35px] right-5 sm:right-[40px] rounded-full z-[999] transform translate-z-0 cursor-pointer shadow-lg">
       <i
         :class="showDeliveryList ? 'fa-map' : 'fa-bars'"
-        class="fa-solid absolute top-[50%] left-[50%] w-full -translate-x-[50%] -translate-y-[50%] text-white text-center text-xl sm:text-2xl"
-      ></i>
+        class="fa-solid absolute top-[50%] left-[50%] w-full -translate-x-[50%] -translate-y-[50%] text-white text-center text-xl sm:text-2xl"></i>
     </div>
   </div>
 </template>
@@ -353,7 +345,7 @@ const getStatusText = (status, isBuffering = false) => {
     if (status === "pickup") return "픽업 진행중...";
     if (status === "delivering") return "배송 진행중...";
   }
-  
+
   const statusMap = {
     pickup: "픽업 대기중",
     delivering: "배송 중",
@@ -368,7 +360,7 @@ const getStatusClass = (status, isBuffering = false) => {
     if (status === "pickup") return "bg-[#D88A60]"; // 픽업→배송 중간 톤
     if (status === "delivering") return "bg-[#4DB8CA]"; // 배송→완료 중간 톤
   }
-  
+
   const statusClass = {
     pickup: "bg-[#E67E50]",
     delivering: "bg-[#00ADD8]",
@@ -453,24 +445,24 @@ const selectMarkerWithBuffer = (info, markerInstance) => {
     // ✅ 추가: 선택된 마커 이미지 변경
     updateMarkerImageByReservation(info.reservationNo, true);
 
-if (map && markerInstance) {
-  const markerPosition = markerInstance.getPosition();
-  
-  // 현재 지도의 투영 객체
-  const projection = map.getProjection();
-  
-  // 마커 위치를 화면 픽셀 좌표로 변환
-  const markerPixel = projection.containerPointFromCoords(markerPosition);
-  
-  // 210px 아래 지점의 픽셀 좌표 계산
-  const targetPixel = new kakao.maps.Point(markerPixel.x, markerPixel.y + 140);
-  
-  // 픽셀 좌표를 다시 지도 좌표로 변환
-  const targetCoords = projection.coordsFromContainerPoint(targetPixel);
-  
-  // 목표 지점으로 부드럽게 이동
-  map.panTo(targetCoords);
-}
+    if (map && markerInstance) {
+      const markerPosition = markerInstance.getPosition();
+
+      // 현재 지도의 투영 객체
+      const projection = map.getProjection();
+
+      // 마커 위치를 화면 픽셀 좌표로 변환
+      const markerPixel = projection.containerPointFromCoords(markerPosition);
+
+      // 210px 아래 지점의 픽셀 좌표 계산
+      const targetPixel = new kakao.maps.Point(markerPixel.x, markerPixel.y + 140);
+
+      // 픽셀 좌표를 다시 지도 좌표로 변환
+      const targetCoords = projection.coordsFromContainerPoint(targetPixel);
+
+      // 목표 지점으로 부드럽게 이동
+      map.panTo(targetCoords);
+    }
   }, 300);
 };
 
@@ -526,7 +518,7 @@ const handleClose = () => {
   if (selectedMarkerInstance.value) {
     updateMarkerImageByReservation(selectedMarkerInstance.value.reservationNo);
   }
-  
+
   showPanel.value = false;
   deliveryStatus.value = "pickup";
   selectedMarker.value = null;
@@ -644,15 +636,15 @@ const initMap = () => {
       });
 
       const deliveryInfo = deliveryList.value.find(
-        (d) => d.storeName === info.title || d.reservationNo === info.reservationNo
+        (d) => d.storeName === info.title || d.reservationNo === info.reservationNo,
       );
-      
+
       // ✅ 수정: 완료 상태면 complete 이미지로 설정
       if (deliveryInfo && deliveryInfo.status === "completed") {
         const completeImageSrc = getCompleteImageByIndex(info.index);
         const completeImage = new kakao.maps.MarkerImage(
           completeImageSrc,
-          new kakao.maps.Size(info.imageSize.width, info.imageSize.height)
+          new kakao.maps.Size(info.imageSize.width, info.imageSize.height),
         );
         marker.setImage(completeImage);
       }
@@ -681,14 +673,14 @@ const fitBoundsToMarkers = () => {
 const updateMarkerImageByReservation = (reservationNo, isSelected = false) => {
   const marker = markers.find((m) => m.reservationNo === reservationNo);
   const delivery = deliveryList.value.find((d) => d.reservationNo === reservationNo);
-  
+
   if (!marker || !delivery) return;
-  
+
   const imageInfo = markerOriginalImages.get(reservationNo);
   if (!imageInfo) return;
-  
+
   let imageSrc;
-  
+
   // 선택 여부와 완료 상태에 따라 이미지 결정
   if (isSelected) {
     // 선택된 상태
@@ -705,12 +697,12 @@ const updateMarkerImageByReservation = (reservationNo, isSelected = false) => {
       imageSrc = imageInfo.normalSrc;
     }
   }
-  
+
   const newImage = new kakao.maps.MarkerImage(
     imageSrc,
-    new kakao.maps.Size(imageInfo.imageSize.width, imageInfo.imageSize.height)
+    new kakao.maps.Size(imageInfo.imageSize.width, imageInfo.imageSize.height),
   );
-  
+
   marker.setImage(newImage);
 };
 
@@ -734,7 +726,7 @@ watch(
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
@@ -763,10 +755,12 @@ watch(
 }
 
 /* 슬라이드 아웃: 완전히 왼쪽 밖으로 빠져나감 */
-.slide-out-left {
+.slide-out-right {
   transform: translateX(+120%);
   opacity: 0;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transition:
+    transform 0.6s ease,
+    opacity 0.6s ease;
 }
 
 @keyframes spin {
